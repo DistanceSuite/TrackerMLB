@@ -2,7 +2,6 @@
   "name": "distance-tracker-web-vite",
   "private": true,
   "type": "module",
-  "homepage": "TrackerMLB",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
