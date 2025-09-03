@@ -48,7 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <a href="https://x.com/distancetracker" className="hover:text-green-300 transition text-lg">
                 <TwitterIcon/>
               </a>
-              <a href="https://x.com/distancetracker" className="hover:text-green-300 transition text-lg">
+              <a href="https://github.com/DistanceSuite/TrackerMLB" className="hover:text-green-300 transition text-lg">
                 <GithubIcon/>
               </a>
             </nav>

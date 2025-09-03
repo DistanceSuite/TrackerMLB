@@ -53,7 +53,7 @@ interface Hit {
     away_team: string;
     wp_x: number;                // Field position X
     wp_y: number;                // Field position Y
-    events_raw?: string;          // Optional raw event info
+    events_raw?: string;
 }
 
 
@@ -161,7 +161,9 @@ export default function Visualization() {
         currentCandidates.map(() => false)
     );
 
-    
+    const [showLoadingPopup, setShowLoadingPopup] = useState<boolean>(true);
+
+
 
     const toggleCheck = (index: number) => {
         setCheckedHits(prev => {
@@ -230,8 +232,8 @@ export default function Visualization() {
             );
 
     return (
-        <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-100 pt-10 text-black">
-            <div className=" mb-4 bg-gray-50 px-10 py-2 rounded-lg shadow-lg flex gap-5 items-center sticky top-18 z-80">
+        <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-100 pt-10 text-black mb-15">
+            <div className=" mb-4 bg-gray-50 px-10 py-2 rounded-lg shadow-lg flex flex-col md:flex-row gap-5 items-center sticky top-18 z-80">
                 <h1 className="text-xl font-semibold">Welcome to the visualizer!</h1>
                 <button className="bg-gray-300 border-2 border-gray-700 text-lg px-4 py-1 rounded-md cursor-pointer hover:border-black transition hover:bg-gray-400" onClick={() => setShowTutorial(true)}>Tutorial</button>
                 <button className="bg-gray-300 border-2 border-gray-700 text-lg px-4 py-1 rounded-md cursor-pointer hover:border-black transition hover:bg-gray-400" onClick={() => setSTATE("PARAMETERS")}>Search hits</button>
@@ -248,6 +250,7 @@ export default function Visualization() {
                 onMouseUp={() => setIsDragging(false)}
                 onMouseLeave={() => setIsDragging(false)}>
                 <Canvas className="rounded-lg bg-sky-300" camera={{ position: [0, 2, 8], fov: 50, far: 5000, near: 0.1 }} shadows>
+
                     <directionalLight color="white" intensity={1} position={[0, 0, 2]} />
                     <ambientLight intensity={2} />
                     <mesh>
@@ -292,6 +295,23 @@ export default function Visualization() {
                     <OrbitControls enablePan={true} enableZoom={true} zoomSpeed={3} panSpeed={2} />
                 </Canvas>
             </div>
+
+            {showLoadingPopup && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-90">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-xl w-full flex flex-col">
+                        <div>
+                            <strong>PLEASE NOTE:</strong> Stadium models are <strong>large!</strong> Please give them time to load. While loading, nothing except a blue screen will be rendered.
+                        </div>
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer mt-4 self-center"
+                            onClick={() => {
+                                setShowLoadingPopup(false);
+                            }}>     Got it!
+                        </button>
+                    </div>
+                </div>
+            )
+            }
 
             {STATE == "PARAMETERS" && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-90">
@@ -365,7 +385,6 @@ export default function Visualization() {
                         <button
                             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer mr-4"
                             onClick={() => {
-                                // Implement hit loading logic here
                                 loadHits();
                             }}>     Load Hits
                         </button>
@@ -388,7 +407,7 @@ export default function Visualization() {
                                 <p className="text-sm">Number of hits loaded: {currentCandidates.length}</p>
                             </div>
                             <button className="bg-blue-400 rounded-md px-4 py-2 text-lg cursor-pointer font-semibold hover:bg-blue-500 transition" onClick={() => {
-                                if(checkedHits.length > 0)
+                                if (checkedHits.length > 0)
                                     setCheckedHits([]);
                                 else
                                     setCheckedHits(currentCandidates.map(() => true));
@@ -403,7 +422,6 @@ export default function Visualization() {
                             {
                                 currentCandidates.map((hit, index) => (
                                     <div key={index} className="border-t border-gray-300 py-2 px-2 rounded-md flex items-center gap-3 cursor-pointer hover:bg-gray-400 transition" onClick={() => toggleCheck(index)}>
-                                        {/* Custom checkbox */}
                                         <button
                                             onClick={() => toggleCheck(index)}
                                             className={`w-6 h-6 flex-shrink-0 rounded border-2 flex items-center justify-center transition-colors ${checkedHits[index] ? "bg-green-600 border-green-600" : "bg-white border-gray-400 cursor-pointer"
@@ -438,13 +456,13 @@ export default function Visualization() {
                                     <li><strong>Pan:</strong> Right-click and drag to pan the view.</li>
                                 </ul>
                             </div>
-                            <p className="mb-4">
+                            <div className="mb-4">
                                 Stadium select:
                                 <ul className="list-disc list-inside">
                                     <li>Change the stadium by using the select in the top bar.</li>
                                     <li>Stadiums may take up to 30 seconds to load, no stadium shown while loading</li>
                                 </ul>
-                            </p>
+                            </div>
                             <p className="mb-4">
                                 Loading hits:
                                 <ul className="list-disc list-inside">

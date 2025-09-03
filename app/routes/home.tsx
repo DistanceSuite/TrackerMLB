@@ -1,6 +1,5 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
-import { AlertCircle, ArrowBigLeftDash, ArrowBigRightDash, BadgeDollarSign, MapPin, MessageCircle, MessageCircleHeart, Target, Twitter, X } from "lucide-react";
+import { ArrowBigLeftDash, ArrowBigRightDash, MapPin, MessageCircle, Target, Twitter } from "lucide-react";
 
 export function meta({ }: Route.MetaArgs) {
   return [
